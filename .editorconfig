@@ -1,0 +1,4 @@
+﻿[*.cs]
+
+# CS0169: The field 'Form_Menu.label_portTip' is never used
+dotnet_diagnostic.CS0169.severity = warning
