@@ -158,8 +158,6 @@
             // checkBox_saveUserSettings
             // 
             this.checkBox_saveUserSettings.AutoSize = true;
-            this.checkBox_saveUserSettings.Checked = true;
-            this.checkBox_saveUserSettings.CheckState = System.Windows.Forms.CheckState.Checked;
             this.checkBox_saveUserSettings.Location = new System.Drawing.Point(8, 191);
             this.checkBox_saveUserSettings.Name = "checkBox_saveUserSettings";
             this.checkBox_saveUserSettings.Size = new System.Drawing.Size(168, 19);

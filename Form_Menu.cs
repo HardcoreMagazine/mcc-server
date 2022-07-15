@@ -42,7 +42,8 @@ namespace mcc_server
                 DbPort = (ushort)numericUD_dbPort.Value,
                 DbName = textBox_dbName.Text,
                 DbTableName = textBox_dbTableName.Text,
-                RunInBG = checkBox_bgRun.Checked
+                RunInBG = checkBox_bgRun.Checked,
+                SaveSettings = checkBox_saveUserSettings.Checked
             };
             string jsonString = JsonSerializer.Serialize(settings);
             try
@@ -79,6 +80,7 @@ namespace mcc_server
                         textBox_dbName.Text = settings.DbName;
                         textBox_dbTableName.Text = settings.DbTableName;
                         checkBox_bgRun.Checked = settings.RunInBG;
+                        checkBox_saveUserSettings.Checked = settings.SaveSettings;
                     }
                     catch (Exception)
                     {
@@ -252,49 +254,6 @@ namespace mcc_server
         }
 
         /// <summary>
-        /// Check mcc connection. True if connected or connection initialized.
-        /// </summary>
-        private bool IsMccConnected
-        {
-            get
-            {
-                try
-                {
-                    if (mccConnection != null &&
-                        mccConnection.Client != null &&
-                        mccConnection.Client.Connected)
-                    {
-                        /* When passing SelectMode.SelectRead as a parameter to the Poll method it will return 
-                         * -either- true if Socket.Listen(Int32) has been called and a connection is pending;
-                         * -or- true if data is available for reading; 
-                         * otherwise, returns false
-                         */
-                        //check if client disconnected
-                        if (mccConnection.Client.Poll(0, SelectMode.SelectRead))
-                        {
-                            byte[] b = new byte[12];
-                            int bytesRecieved = mccConnection.Client.Receive(b, SocketFlags.Peek);
-                            //first IF case: no TCP authorization, second: TEA auth.
-                            if (bytesRecieved == 0 || bytesRecieved == 12)
-                                return false; //client disconnected
-                            else
-                                return true;
-                        }
-                        return true;
-                    }
-                    else
-                    {
-                        return false;
-                    }
-                }
-                catch
-                {
-                    return false;
-                }
-            }
-        }
-
-        /// <summary>
         /// Attempts connecting to mcc; on success -
         /// sends command, listens to assigned port (if listen eq. true)
         /// and closes the connection.
@@ -370,6 +329,8 @@ namespace mcc_server
 
         private void Form_Menu_Load(object sender, EventArgs e)
         {
+            // If 'checkBox_saveUserSettings' was checked once 
+            // keep saving unless user checks-out option (until next launch)
             LoadSettings();
         }
 
