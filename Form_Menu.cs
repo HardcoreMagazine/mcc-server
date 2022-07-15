@@ -18,14 +18,13 @@ namespace mcc_server
 
         private struct MCCD
         {
-            public float tmp; //temperature
-            public float vbr; //vibrations
-            public float rpm; //rounds per minute
+            public double tmp; //temperature
+            public double vbr; //vibrations
+            public double rpm; //rounds per minute
         }
 
-        private const int msgSize = 8 * 8; //max message size: 64 B
+        private const int msgSize = 128; //max message size: 128 B
         private byte[] asyncBuffer = new byte[msgSize];
-        private TcpClient mccConnection = new TcpClient();
 
         /// <summary>
         /// Save all current settings on local hard drive. 
@@ -94,10 +93,10 @@ namespace mcc_server
         /// <summary>
         /// Toggles label_engineStatus
         /// </summary>
-        /// <param name="forseOff">Optional param. Set to true to override into 'OFF' mode</param>
-        private void ToggleEngineLabel(bool forseOff = false)
+        /// <param name="forceOff">Optional param. Set to true to override into 'OFF' mode</param>
+        private void ToggleEngineLabel(bool forceOff = false)
         {
-            if (forseOff)
+            if (forceOff)
             {
                 label_engineStatus.Text = "ENGINE IS OFF";
                 label_engineStatus.ForeColor = Color.Red;
@@ -130,9 +129,9 @@ namespace mcc_server
             asyncBuffer = new byte[msgSize]; // Override used data with empty values
             MCCD data = new MCCD()
             {
-                tmp = 0f,
-                vbr = 0f,
-                rpm = 0f
+                tmp = 0,
+                vbr = 0,
+                rpm = 0
             };
             // Extracts all numbers from string; works will any-point numbers
             string numRegex = "[0-9\\.0-9]+";
@@ -141,8 +140,8 @@ namespace mcc_server
                 try
                 {
                     string valueRaw = Regex.Match(stringBuffer[j], numRegex).Value;
-                    float valueFloat = (float)Math.Round(float.Parse(valueRaw, CultureInfo.InvariantCulture), 3);
-                    string valueString = valueFloat.ToString(); // Rounded value (point-3)
+                    double valueDouble = Math.Round(double.Parse(valueRaw, CultureInfo.InvariantCulture), 3);
+                    string valueString = valueDouble.ToString(); // Rounded value (point-3)
                     // Could've used SWITCH statement here, 
                     // but since 'string.Contains()' is present
                     // it'll be A LOT easier to understand
@@ -150,17 +149,17 @@ namespace mcc_server
                     if (stringBuffer[j].Contains("tmp="))
                     {
                         textBox_varTmp.Text = valueString;
-                        data.tmp = valueFloat;
+                        data.tmp = valueDouble;
                     }
                     else if (stringBuffer[j].Contains("vbr="))
                     {
                         textBox_varVbr.Text = valueString;
-                        data.vbr = valueFloat;
+                        data.vbr = valueDouble;
                     }
                     else if (stringBuffer[j].Contains("rpm="))
                     {
                         textBox_varRpm.Text = valueString;
-                        data.rpm = valueFloat;
+                        data.rpm = valueDouble;
                     }
                     else
                     {
@@ -205,10 +204,16 @@ namespace mcc_server
                                                     // Throws exception on timeout
 
                     // Send query
+                    string[] parsedValues = new string[]
+                    {
+                        dt.tmp.ToString().Replace(',', '.'),
+                        dt.vbr.ToString().Replace(',', '.'),
+                        dt.rpm.ToString().Replace(',', '.')
+                    };
                     string queryString =
                         $"INSERT INTO {databaseName}.{dbTableName} " +
                         $"(temperature, vibrations,  rpm) " +
-                        $"values('{dt.tmp}', '{dt.vbr}', '{dt.rpm}')";
+                        $"values('{parsedValues[0]}', '{parsedValues[1]}', '{parsedValues[2]}')";
                     MySqlCommand command = new MySqlCommand(queryString, dbConnection);
                     await command.ExecuteNonQueryAsync();
 
@@ -283,8 +288,8 @@ namespace mcc_server
                         NetworkStream ns = client.GetStream();
                         await ns.ReadAsync(asyncBuffer);
                         MCCD data = ProcessData();
-                        if (data.vbr != 0f || data.tmp != 0f || data.rpm != 0f)
-                            await SendToDatabase(ProcessData());
+                        if (data.vbr != 0 || data.tmp != 0 || data.rpm != 0)
+                            await SendToDatabase(data);
                     } while (label_engineStatus.Text == "ENGINE IS ON");
                     client.Close();
                     tcpListener.Stop();
@@ -309,20 +314,26 @@ namespace mcc_server
         }
 
         //--------------------------------------------------------------------------------------------//
-        private void button_engineToggle_Click(object sender, EventArgs e)
+        async private void button_engineToggle_Click(object sender, EventArgs e)
         {
             button_engineToggle.Enabled = false;
             if (label_engineStatus.Text == "ENGINE IS OFF") // Default option
             {
                 // Enable engine, begin listening
-                SendToMcc("@ee", true);
                 ToggleEngineLabel();
+                await Task.Run(() =>
+                {
+                    SendToMcc("@ee", true);
+                });
             }
             else
             {
                 // Disable engine, no listening
-                SendToMcc("@de");
                 ToggleEngineLabel(true);
+                await Task.Run(() =>
+                {
+                    SendToMcc("@de");
+                });
             }
             button_engineToggle.Enabled = true;
         }
