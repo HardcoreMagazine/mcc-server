@@ -6,6 +6,8 @@ using MySql.Data.MySqlClient;
 using System.Data.Common;
 using System.Net;
 using System.Globalization;
+using System.Linq.Expressions;
+using System.Reflection;
 
 namespace mcc_server
 {
@@ -134,7 +136,7 @@ namespace mcc_server
                 rpm = 0
             };
             // Extracts all numbers from string; works will any-point numbers
-            string numRegex = "[0-9\\.0-9]+";
+            string numRegex = "[0-9\\.|,0-9]+";
             for (int j = 0; j < stringBuffer.Length; j++)
             {
                 try
@@ -148,17 +150,18 @@ namespace mcc_server
                     // IF-ELSE statements in (possible) future.
                     if (stringBuffer[j].Contains("tmp="))
                     {
-                        textBox_varTmp.Text = valueString;
+                        // No direct textBox access from parallel thread
+                        textBox_varTmp.Invoke(new Action(() => textBox_varTmp.Text = valueString));
                         data.tmp = valueDouble;
                     }
                     else if (stringBuffer[j].Contains("vbr="))
                     {
-                        textBox_varVbr.Text = valueString;
+                        textBox_varVbr.Invoke(new Action(() => textBox_varVbr.Text = valueString));
                         data.vbr = valueDouble;
                     }
                     else if (stringBuffer[j].Contains("rpm="))
                     {
-                        textBox_varRpm.Text = valueString;
+                        textBox_varRpm.Invoke(new Action(() => textBox_varRpm.Text = valueString));
                         data.rpm = valueDouble;
                     }
                     else
@@ -288,6 +291,7 @@ namespace mcc_server
                         NetworkStream ns = client.GetStream();
                         await ns.ReadAsync(asyncBuffer);
                         MCCD data = ProcessData();
+                        // Double-check if processed data isnt empty
                         if (data.vbr != 0 || data.tmp != 0 || data.rpm != 0)
                             await SendToDatabase(data);
                     } while (label_engineStatus.Text == "ENGINE IS ON");
