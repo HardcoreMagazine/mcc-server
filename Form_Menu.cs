@@ -6,8 +6,6 @@ using MySql.Data.MySqlClient;
 using System.Data.Common;
 using System.Net;
 using System.Globalization;
-using System.Linq.Expressions;
-using System.Reflection;
 
 namespace mcc_server
 {
@@ -136,7 +134,7 @@ namespace mcc_server
                 rpm = 0
             };
             // Extracts all numbers from string; works will any-point numbers
-            string numRegex = "[0-9\\.|,0-9]+";
+            string numRegex = "[-0-9\\.|,0-9]+";
             for (int j = 0; j < stringBuffer.Length; j++)
             {
                 try
@@ -384,6 +382,11 @@ namespace mcc_server
                 if (checkBox_saveUserSettings.Checked) //true by default
                     SaveSettings();
             }
+        }
+
+        private void button_launchWeb_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }

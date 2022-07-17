@@ -55,9 +55,11 @@
             this.textBox_varRpm = new System.Windows.Forms.TextBox();
             this.textBox_varTmp = new System.Windows.Forms.TextBox();
             this.textBox_varVbr = new System.Windows.Forms.TextBox();
+            this.tabPage_web = new System.Windows.Forms.TabPage();
             this.notifyIcon_bgRun = new System.Windows.Forms.NotifyIcon(this.components);
             this.contextMenuStrip_bgRunMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.CloseToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.button_launchWeb = new System.Windows.Forms.Button();
             label_addrTip = new System.Windows.Forms.Label();
             label_portTip = new System.Windows.Forms.Label();
             this.tabControl_menu.SuspendLayout();
@@ -65,6 +67,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.numericUD_dbPort)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUD_mccPort)).BeginInit();
             this.tabPage_dataflow.SuspendLayout();
+            this.tabPage_web.SuspendLayout();
             this.contextMenuStrip_bgRunMenu.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -80,7 +83,7 @@
             // label_portTip
             // 
             label_portTip.AutoSize = true;
-            label_portTip.Location = new System.Drawing.Point(217, 11);
+            label_portTip.Location = new System.Drawing.Point(235, 11);
             label_portTip.Name = "label_portTip";
             label_portTip.Size = new System.Drawing.Size(29, 15);
             label_portTip.TabIndex = 11;
@@ -90,10 +93,11 @@
             // 
             this.tabControl_menu.Controls.Add(this.tabPage_settings);
             this.tabControl_menu.Controls.Add(this.tabPage_dataflow);
+            this.tabControl_menu.Controls.Add(this.tabPage_web);
             this.tabControl_menu.Location = new System.Drawing.Point(0, 0);
             this.tabControl_menu.Name = "tabControl_menu";
             this.tabControl_menu.SelectedIndex = 0;
-            this.tabControl_menu.Size = new System.Drawing.Size(289, 273);
+            this.tabControl_menu.Size = new System.Drawing.Size(306, 273);
             this.tabControl_menu.SizeMode = System.Windows.Forms.TabSizeMode.Fixed;
             this.tabControl_menu.TabIndex = 0;
             // 
@@ -116,7 +120,7 @@
             this.tabPage_settings.Location = new System.Drawing.Point(4, 24);
             this.tabPage_settings.Name = "tabPage_settings";
             this.tabPage_settings.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage_settings.Size = new System.Drawing.Size(281, 245);
+            this.tabPage_settings.Size = new System.Drawing.Size(298, 245);
             this.tabPage_settings.TabIndex = 0;
             this.tabPage_settings.Text = "Settings";
             this.tabPage_settings.UseVisualStyleBackColor = true;
@@ -124,7 +128,7 @@
             // label_dbTableNameTip
             // 
             this.label_dbTableNameTip.AutoSize = true;
-            this.label_dbTableNameTip.Location = new System.Drawing.Point(166, 118);
+            this.label_dbTableNameTip.Location = new System.Drawing.Point(176, 118);
             this.label_dbTableNameTip.Name = "label_dbTableNameTip";
             this.label_dbTableNameTip.Size = new System.Drawing.Size(67, 15);
             this.label_dbTableNameTip.TabIndex = 19;
@@ -143,15 +147,15 @@
             // 
             this.textBox_dbName.Location = new System.Drawing.Point(62, 92);
             this.textBox_dbName.Name = "textBox_dbName";
-            this.textBox_dbName.Size = new System.Drawing.Size(103, 23);
+            this.textBox_dbName.Size = new System.Drawing.Size(108, 23);
             this.textBox_dbName.TabIndex = 17;
             this.textBox_dbName.Text = "mydb";
             // 
             // textBox_dbTableName
             // 
-            this.textBox_dbTableName.Location = new System.Drawing.Point(166, 92);
+            this.textBox_dbTableName.Location = new System.Drawing.Point(176, 92);
             this.textBox_dbTableName.Name = "textBox_dbTableName";
-            this.textBox_dbTableName.Size = new System.Drawing.Size(103, 23);
+            this.textBox_dbTableName.Size = new System.Drawing.Size(110, 23);
             this.textBox_dbTableName.TabIndex = 16;
             this.textBox_dbTableName.Text = "mymcc";
             // 
@@ -177,14 +181,14 @@
             // 
             // numericUD_dbPort
             // 
-            this.numericUD_dbPort.Location = new System.Drawing.Point(209, 63);
+            this.numericUD_dbPort.Location = new System.Drawing.Point(223, 63);
             this.numericUD_dbPort.Maximum = new decimal(new int[] {
             65535,
             0,
             0,
             0});
             this.numericUD_dbPort.Name = "numericUD_dbPort";
-            this.numericUD_dbPort.Size = new System.Drawing.Size(60, 23);
+            this.numericUD_dbPort.Size = new System.Drawing.Size(63, 23);
             this.numericUD_dbPort.TabIndex = 13;
             this.numericUD_dbPort.Value = new decimal(new int[] {
             3306,
@@ -194,7 +198,7 @@
             // 
             // numericUD_mccPort
             // 
-            this.numericUD_mccPort.Location = new System.Drawing.Point(209, 29);
+            this.numericUD_mccPort.Location = new System.Drawing.Point(223, 29);
             this.numericUD_mccPort.Maximum = new decimal(new int[] {
             65535,
             0,
@@ -222,7 +226,7 @@
             // 
             this.textBox_dbAddr.Location = new System.Drawing.Point(62, 63);
             this.textBox_dbAddr.Name = "textBox_dbAddr";
-            this.textBox_dbAddr.Size = new System.Drawing.Size(141, 23);
+            this.textBox_dbAddr.Size = new System.Drawing.Size(158, 23);
             this.textBox_dbAddr.TabIndex = 3;
             this.textBox_dbAddr.Text = "127.0.0.1";
             // 
@@ -239,7 +243,7 @@
             // 
             this.textBox_mccAddr.Location = new System.Drawing.Point(62, 29);
             this.textBox_mccAddr.Name = "textBox_mccAddr";
-            this.textBox_mccAddr.Size = new System.Drawing.Size(141, 23);
+            this.textBox_mccAddr.Size = new System.Drawing.Size(158, 23);
             this.textBox_mccAddr.TabIndex = 0;
             this.textBox_mccAddr.Text = "127.0.0.1";
             // 
@@ -256,7 +260,7 @@
             this.tabPage_dataflow.Location = new System.Drawing.Point(4, 24);
             this.tabPage_dataflow.Name = "tabPage_dataflow";
             this.tabPage_dataflow.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage_dataflow.Size = new System.Drawing.Size(281, 245);
+            this.tabPage_dataflow.Size = new System.Drawing.Size(298, 245);
             this.tabPage_dataflow.TabIndex = 1;
             this.tabPage_dataflow.Text = "Dataflow";
             this.tabPage_dataflow.UseVisualStyleBackColor = true;
@@ -266,7 +270,7 @@
             this.label_engineStatus.AutoSize = true;
             this.label_engineStatus.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             this.label_engineStatus.ForeColor = System.Drawing.Color.Red;
-            this.label_engineStatus.Location = new System.Drawing.Point(55, 98);
+            this.label_engineStatus.Location = new System.Drawing.Point(183, 15);
             this.label_engineStatus.Name = "label_engineStatus";
             this.label_engineStatus.Size = new System.Drawing.Size(88, 15);
             this.label_engineStatus.TabIndex = 10;
@@ -274,9 +278,9 @@
             // 
             // button_engineToggle
             // 
-            this.button_engineToggle.Location = new System.Drawing.Point(14, 116);
+            this.button_engineToggle.Location = new System.Drawing.Point(183, 33);
             this.button_engineToggle.Name = "button_engineToggle";
-            this.button_engineToggle.Size = new System.Drawing.Size(159, 23);
+            this.button_engineToggle.Size = new System.Drawing.Size(88, 55);
             this.button_engineToggle.TabIndex = 9;
             this.button_engineToggle.Text = "TOGGLE ENGINE";
             this.button_engineToggle.UseVisualStyleBackColor = true;
@@ -285,7 +289,7 @@
             // label_varRpm
             // 
             this.label_varRpm.AutoSize = true;
-            this.label_varRpm.Location = new System.Drawing.Point(55, 65);
+            this.label_varRpm.Location = new System.Drawing.Point(49, 68);
             this.label_varRpm.Name = "label_varRpm";
             this.label_varRpm.Size = new System.Drawing.Size(32, 15);
             this.label_varRpm.TabIndex = 7;
@@ -294,7 +298,7 @@
             // label_varVbr
             // 
             this.label_varVbr.AutoSize = true;
-            this.label_varVbr.Location = new System.Drawing.Point(27, 39);
+            this.label_varVbr.Location = new System.Drawing.Point(21, 39);
             this.label_varVbr.Name = "label_varVbr";
             this.label_varVbr.Size = new System.Drawing.Size(60, 15);
             this.label_varVbr.TabIndex = 6;
@@ -303,7 +307,7 @@
             // label_varTmp
             // 
             this.label_varTmp.AutoSize = true;
-            this.label_varTmp.Location = new System.Drawing.Point(14, 10);
+            this.label_varTmp.Location = new System.Drawing.Point(8, 10);
             this.label_varTmp.Name = "label_varTmp";
             this.label_varTmp.Size = new System.Drawing.Size(73, 15);
             this.label_varTmp.TabIndex = 5;
@@ -311,7 +315,7 @@
             // 
             // textBox_varRpm
             // 
-            this.textBox_varRpm.Location = new System.Drawing.Point(93, 65);
+            this.textBox_varRpm.Location = new System.Drawing.Point(87, 65);
             this.textBox_varRpm.Name = "textBox_varRpm";
             this.textBox_varRpm.ReadOnly = true;
             this.textBox_varRpm.Size = new System.Drawing.Size(80, 23);
@@ -319,7 +323,7 @@
             // 
             // textBox_varTmp
             // 
-            this.textBox_varTmp.Location = new System.Drawing.Point(93, 7);
+            this.textBox_varTmp.Location = new System.Drawing.Point(87, 7);
             this.textBox_varTmp.Name = "textBox_varTmp";
             this.textBox_varTmp.ReadOnly = true;
             this.textBox_varTmp.Size = new System.Drawing.Size(80, 23);
@@ -327,11 +331,22 @@
             // 
             // textBox_varVbr
             // 
-            this.textBox_varVbr.Location = new System.Drawing.Point(93, 36);
+            this.textBox_varVbr.Location = new System.Drawing.Point(87, 36);
             this.textBox_varVbr.Name = "textBox_varVbr";
             this.textBox_varVbr.ReadOnly = true;
             this.textBox_varVbr.Size = new System.Drawing.Size(80, 23);
             this.textBox_varVbr.TabIndex = 1;
+            // 
+            // tabPage_web
+            // 
+            this.tabPage_web.Controls.Add(this.button_launchWeb);
+            this.tabPage_web.Location = new System.Drawing.Point(4, 24);
+            this.tabPage_web.Name = "tabPage_web";
+            this.tabPage_web.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPage_web.Size = new System.Drawing.Size(298, 245);
+            this.tabPage_web.TabIndex = 2;
+            this.tabPage_web.Text = "Web";
+            this.tabPage_web.UseVisualStyleBackColor = true;
             // 
             // notifyIcon_bgRun
             // 
@@ -356,11 +371,21 @@
             this.CloseToolStripMenuItem.Text = "Close";
             this.CloseToolStripMenuItem.Click += new System.EventHandler(this.CloseToolStripMenuItem_Click);
             // 
+            // button_launchWeb
+            // 
+            this.button_launchWeb.Location = new System.Drawing.Point(93, 110);
+            this.button_launchWeb.Name = "button_launchWeb";
+            this.button_launchWeb.Size = new System.Drawing.Size(104, 23);
+            this.button_launchWeb.TabIndex = 0;
+            this.button_launchWeb.Text = "Launch web app";
+            this.button_launchWeb.UseVisualStyleBackColor = true;
+            this.button_launchWeb.Click += new System.EventHandler(this.button_launchWeb_Click);
+            // 
             // Form_Menu
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(287, 271);
+            this.ClientSize = new System.Drawing.Size(302, 271);
             this.Controls.Add(this.tabControl_menu);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.MaximizeBox = false;
@@ -375,6 +400,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.numericUD_mccPort)).EndInit();
             this.tabPage_dataflow.ResumeLayout(false);
             this.tabPage_dataflow.PerformLayout();
+            this.tabPage_web.ResumeLayout(false);
             this.contextMenuStrip_bgRunMenu.ResumeLayout(false);
             this.ResumeLayout(false);
 
@@ -410,5 +436,7 @@
         private TextBox textBox_dbName;
         private TextBox textBox_dbTableName;
         private Label label_dbTableNameTip;
+        private TabPage tabPage_web;
+        private Button button_launchWeb;
     }
 }
