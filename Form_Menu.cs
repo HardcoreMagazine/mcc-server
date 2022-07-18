@@ -41,6 +41,7 @@ namespace mcc_server
                 DbPort = (ushort)numericUD_dbPort.Value,
                 DbName = textBox_dbName.Text,
                 DbTableName = textBox_dbTableName.Text,
+                ClientsPort = (ushort)numericUD_dbPort.Value,
                 RunInBG = checkBox_bgRun.Checked,
                 SaveSettings = checkBox_saveUserSettings.Checked
             };
@@ -78,6 +79,7 @@ namespace mcc_server
                         numericUD_dbPort.Value = settings.DbPort;
                         textBox_dbName.Text = settings.DbName;
                         textBox_dbTableName.Text = settings.DbTableName;
+                        numericUD_clientsPort.Value = settings.ClientsPort;
                         checkBox_bgRun.Checked = settings.RunInBG;
                         checkBox_saveUserSettings.Checked = settings.SaveSettings;
                     }
@@ -149,17 +151,20 @@ namespace mcc_server
                     if (stringBuffer[j].Contains("tmp="))
                     {
                         // No direct textBox access from parallel thread
-                        textBox_varTmp.Invoke(new Action(() => textBox_varTmp.Text = valueString));
+                        textBox_varTmp.Invoke(
+                            new Action(() => textBox_varTmp.Text = valueString));
                         data.tmp = valueDouble;
                     }
                     else if (stringBuffer[j].Contains("vbr="))
                     {
-                        textBox_varVbr.Invoke(new Action(() => textBox_varVbr.Text = valueString));
+                        textBox_varVbr.Invoke(
+                            new Action(() => textBox_varVbr.Text = valueString));
                         data.vbr = valueDouble;
                     }
                     else if (stringBuffer[j].Contains("rpm="))
                     {
-                        textBox_varRpm.Invoke(new Action(() => textBox_varRpm.Text = valueString));
+                        textBox_varRpm.Invoke(
+                            new Action(() => textBox_varRpm.Text = valueString));
                         data.rpm = valueDouble;
                     }
                     else
@@ -187,8 +192,14 @@ namespace mcc_server
             string databaseName = textBox_dbName.Text;
             string dbTableName = textBox_dbTableName.Text;
             if (String.IsNullOrWhiteSpace(ip))
+            {
+                // Low-medium priority:
+                // will never show up unless called on main thread
+                /*
                 MessageBox.Show("Provide database connection address", "Error",
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
+                */
+            }
             else
             {
                 try
@@ -223,13 +234,19 @@ namespace mcc_server
                 }
                 catch (MySqlException)
                 {
+                    // Low-medium priority:
+                    // will never show up unless called on main thread
+                    /*
                     MessageBox.Show($"Unable to connect with '{ip}:{port}'", "Error",
                         MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    */
                 }
                 catch (DbException)
                 {
+                    /*
                     MessageBox.Show($"Unable to send query to '{databaseName}.{dbTableName}'", "Error",
                         MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    */
                 }
                 catch (Exception)
                 {
@@ -279,12 +296,13 @@ namespace mcc_server
                     await ns.WriteAsync(Encoding.ASCII.GetBytes(cmd));
                 }
                 mccTcpClient.Close();
+                this.Invoke(new Action(() => button_engineToggle.Enabled = true));
                 if (listen)
                 {
                     TcpListener tcpListener = new TcpListener(IPAddress.Parse(GetLocalIPv4Address()), 29000 + 1);
                     tcpListener.Start();
                     TcpClient client = tcpListener.AcceptTcpClient();
-                    do
+                    while (label_engineStatus.Text == "ENGINE IS ON")
                     {
                         NetworkStream ns = client.GetStream();
                         await ns.ReadAsync(asyncBuffer);
@@ -292,26 +310,40 @@ namespace mcc_server
                         // Double-check if processed data isnt empty
                         if (data.vbr != 0 || data.tmp != 0 || data.rpm != 0)
                             await SendToDatabase(data);
-                    } while (label_engineStatus.Text == "ENGINE IS ON");
+                    }
                     client.Close();
                     tcpListener.Stop();
                 }
             }
             catch (SocketException)
             {
-                ToggleEngineLabel(true);
-                MessageBox.Show($"Unable to connect with '{ip}:{port}'", "Error",
-                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+                // Invoke functions on main thread
+                this.Invoke(new Action(() =>
+                {
+                    ToggleEngineLabel(true);
+                    MessageBox.Show($"Unable to connect with '{ip}:{port}'", "Error",
+                        MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }));
             }
             catch (IOException)
             {
-                ToggleEngineLabel(true);
-                MessageBox.Show($"Unable to send command to '{ip}:{port}'", "Error",
-                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+                this.Invoke(new Action(() =>
+                {
+                    ToggleEngineLabel(true);
+                    MessageBox.Show($"Unable to send command to '{ip}:{port}'", "Error",
+                        MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }));
             }
             catch (Exception) // Unknown error 
             {
-                ToggleEngineLabel(true);
+                this.Invoke(new Action(() =>
+                {
+                    ToggleEngineLabel(true);
+                }));
+            }
+            finally
+            {
+                button_engineToggle.Invoke(new Action(() => button_engineToggle.Enabled = true));
             }
         }
 
@@ -337,7 +369,6 @@ namespace mcc_server
                     SendToMcc("@de");
                 });
             }
-            button_engineToggle.Enabled = true;
         }
 
         private void Form_Menu_Load(object sender, EventArgs e)
@@ -382,11 +413,6 @@ namespace mcc_server
                 if (checkBox_saveUserSettings.Checked) //true by default
                     SaveSettings();
             }
-        }
-
-        private void button_launchWeb_Click(object sender, EventArgs e)
-        {
-
         }
     }
 }

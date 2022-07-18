@@ -9,6 +9,7 @@
         public ushort DbPort { get; set; }
         public string DbName { get; set; }
         public string DbTableName { get; set; }
+        public ushort ClientsPort { get; set; }
         public bool RunInBG { get; set; }
         public bool SaveSettings { get; set; }
     }

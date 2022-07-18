@@ -32,6 +32,7 @@
             System.Windows.Forms.Label label_addrTip;
             System.Windows.Forms.Label label_portTip;
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form_Menu));
+            System.Windows.Forms.Label label_clientsPort;
             this.tabControl_menu = new System.Windows.Forms.TabControl();
             this.tabPage_settings = new System.Windows.Forms.TabPage();
             this.label_dbTableNameTip = new System.Windows.Forms.Label();
@@ -55,26 +56,32 @@
             this.textBox_varRpm = new System.Windows.Forms.TextBox();
             this.textBox_varTmp = new System.Windows.Forms.TextBox();
             this.textBox_varVbr = new System.Windows.Forms.TextBox();
-            this.tabPage_web = new System.Windows.Forms.TabPage();
             this.notifyIcon_bgRun = new System.Windows.Forms.NotifyIcon(this.components);
             this.contextMenuStrip_bgRunMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.CloseToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.button_launchWeb = new System.Windows.Forms.Button();
+            this.groupBox_connections = new System.Windows.Forms.GroupBox();
+            this.groupBox_dbInfo = new System.Windows.Forms.GroupBox();
+            this.groupBox_clients = new System.Windows.Forms.GroupBox();
+            this.numericUD_clientsPort = new System.Windows.Forms.NumericUpDown();
             label_addrTip = new System.Windows.Forms.Label();
             label_portTip = new System.Windows.Forms.Label();
+            label_clientsPort = new System.Windows.Forms.Label();
             this.tabControl_menu.SuspendLayout();
             this.tabPage_settings.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericUD_dbPort)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUD_mccPort)).BeginInit();
             this.tabPage_dataflow.SuspendLayout();
-            this.tabPage_web.SuspendLayout();
             this.contextMenuStrip_bgRunMenu.SuspendLayout();
+            this.groupBox_connections.SuspendLayout();
+            this.groupBox_dbInfo.SuspendLayout();
+            this.groupBox_clients.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUD_clientsPort)).BeginInit();
             this.SuspendLayout();
             // 
             // label_addrTip
             // 
             label_addrTip.AutoSize = true;
-            label_addrTip.Location = new System.Drawing.Point(89, 11);
+            label_addrTip.Location = new System.Drawing.Point(72, 19);
             label_addrTip.Name = "label_addrTip";
             label_addrTip.Size = new System.Drawing.Size(95, 15);
             label_addrTip.TabIndex = 10;
@@ -83,7 +90,7 @@
             // label_portTip
             // 
             label_portTip.AutoSize = true;
-            label_portTip.Location = new System.Drawing.Point(235, 11);
+            label_portTip.Location = new System.Drawing.Point(185, 19);
             label_portTip.Name = "label_portTip";
             label_portTip.Size = new System.Drawing.Size(29, 15);
             label_portTip.TabIndex = 11;
@@ -93,34 +100,24 @@
             // 
             this.tabControl_menu.Controls.Add(this.tabPage_settings);
             this.tabControl_menu.Controls.Add(this.tabPage_dataflow);
-            this.tabControl_menu.Controls.Add(this.tabPage_web);
             this.tabControl_menu.Location = new System.Drawing.Point(0, 0);
             this.tabControl_menu.Name = "tabControl_menu";
             this.tabControl_menu.SelectedIndex = 0;
-            this.tabControl_menu.Size = new System.Drawing.Size(306, 273);
+            this.tabControl_menu.Size = new System.Drawing.Size(270, 357);
             this.tabControl_menu.SizeMode = System.Windows.Forms.TabSizeMode.Fixed;
             this.tabControl_menu.TabIndex = 0;
             // 
             // tabPage_settings
             // 
-            this.tabPage_settings.Controls.Add(this.label_dbTableNameTip);
-            this.tabPage_settings.Controls.Add(this.label_dbNameTip);
-            this.tabPage_settings.Controls.Add(this.textBox_dbName);
-            this.tabPage_settings.Controls.Add(this.textBox_dbTableName);
+            this.tabPage_settings.Controls.Add(this.groupBox_clients);
+            this.tabPage_settings.Controls.Add(this.groupBox_dbInfo);
+            this.tabPage_settings.Controls.Add(this.groupBox_connections);
             this.tabPage_settings.Controls.Add(this.checkBox_saveUserSettings);
             this.tabPage_settings.Controls.Add(this.checkBox_bgRun);
-            this.tabPage_settings.Controls.Add(this.numericUD_dbPort);
-            this.tabPage_settings.Controls.Add(this.numericUD_mccPort);
-            this.tabPage_settings.Controls.Add(label_portTip);
-            this.tabPage_settings.Controls.Add(label_addrTip);
-            this.tabPage_settings.Controls.Add(this.label_dbAddr);
-            this.tabPage_settings.Controls.Add(this.textBox_dbAddr);
-            this.tabPage_settings.Controls.Add(this.label_mccAddr);
-            this.tabPage_settings.Controls.Add(this.textBox_mccAddr);
             this.tabPage_settings.Location = new System.Drawing.Point(4, 24);
             this.tabPage_settings.Name = "tabPage_settings";
             this.tabPage_settings.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage_settings.Size = new System.Drawing.Size(298, 245);
+            this.tabPage_settings.Size = new System.Drawing.Size(262, 329);
             this.tabPage_settings.TabIndex = 0;
             this.tabPage_settings.Text = "Settings";
             this.tabPage_settings.UseVisualStyleBackColor = true;
@@ -128,7 +125,7 @@
             // label_dbTableNameTip
             // 
             this.label_dbTableNameTip.AutoSize = true;
-            this.label_dbTableNameTip.Location = new System.Drawing.Point(176, 118);
+            this.label_dbTableNameTip.Location = new System.Drawing.Point(27, 64);
             this.label_dbTableNameTip.Name = "label_dbTableNameTip";
             this.label_dbTableNameTip.Size = new System.Drawing.Size(67, 15);
             this.label_dbTableNameTip.TabIndex = 19;
@@ -137,7 +134,7 @@
             // label_dbNameTip
             // 
             this.label_dbNameTip.AutoSize = true;
-            this.label_dbNameTip.Location = new System.Drawing.Point(62, 118);
+            this.label_dbNameTip.Location = new System.Drawing.Point(6, 34);
             this.label_dbNameTip.Name = "label_dbNameTip";
             this.label_dbNameTip.Size = new System.Drawing.Size(88, 15);
             this.label_dbNameTip.TabIndex = 18;
@@ -145,24 +142,24 @@
             // 
             // textBox_dbName
             // 
-            this.textBox_dbName.Location = new System.Drawing.Point(62, 92);
+            this.textBox_dbName.Location = new System.Drawing.Point(98, 31);
             this.textBox_dbName.Name = "textBox_dbName";
-            this.textBox_dbName.Size = new System.Drawing.Size(108, 23);
+            this.textBox_dbName.Size = new System.Drawing.Size(147, 23);
             this.textBox_dbName.TabIndex = 17;
             this.textBox_dbName.Text = "mydb";
             // 
             // textBox_dbTableName
             // 
-            this.textBox_dbTableName.Location = new System.Drawing.Point(176, 92);
+            this.textBox_dbTableName.Location = new System.Drawing.Point(100, 60);
             this.textBox_dbTableName.Name = "textBox_dbTableName";
-            this.textBox_dbTableName.Size = new System.Drawing.Size(110, 23);
+            this.textBox_dbTableName.Size = new System.Drawing.Size(145, 23);
             this.textBox_dbTableName.TabIndex = 16;
             this.textBox_dbTableName.Text = "mymcc";
             // 
             // checkBox_saveUserSettings
             // 
             this.checkBox_saveUserSettings.AutoSize = true;
-            this.checkBox_saveUserSettings.Location = new System.Drawing.Point(8, 191);
+            this.checkBox_saveUserSettings.Location = new System.Drawing.Point(7, 283);
             this.checkBox_saveUserSettings.Name = "checkBox_saveUserSettings";
             this.checkBox_saveUserSettings.Size = new System.Drawing.Size(168, 19);
             this.checkBox_saveUserSettings.TabIndex = 15;
@@ -172,7 +169,7 @@
             // checkBox_bgRun
             // 
             this.checkBox_bgRun.AutoSize = true;
-            this.checkBox_bgRun.Location = new System.Drawing.Point(8, 216);
+            this.checkBox_bgRun.Location = new System.Drawing.Point(8, 308);
             this.checkBox_bgRun.Name = "checkBox_bgRun";
             this.checkBox_bgRun.Size = new System.Drawing.Size(246, 19);
             this.checkBox_bgRun.TabIndex = 14;
@@ -181,14 +178,14 @@
             // 
             // numericUD_dbPort
             // 
-            this.numericUD_dbPort.Location = new System.Drawing.Point(223, 63);
+            this.numericUD_dbPort.Location = new System.Drawing.Point(185, 68);
             this.numericUD_dbPort.Maximum = new decimal(new int[] {
             65535,
             0,
             0,
             0});
             this.numericUD_dbPort.Name = "numericUD_dbPort";
-            this.numericUD_dbPort.Size = new System.Drawing.Size(63, 23);
+            this.numericUD_dbPort.Size = new System.Drawing.Size(60, 23);
             this.numericUD_dbPort.TabIndex = 13;
             this.numericUD_dbPort.Value = new decimal(new int[] {
             3306,
@@ -198,7 +195,7 @@
             // 
             // numericUD_mccPort
             // 
-            this.numericUD_mccPort.Location = new System.Drawing.Point(223, 29);
+            this.numericUD_mccPort.Location = new System.Drawing.Point(185, 39);
             this.numericUD_mccPort.Maximum = new decimal(new int[] {
             65535,
             0,
@@ -216,7 +213,7 @@
             // label_dbAddr
             // 
             this.label_dbAddr.AutoSize = true;
-            this.label_dbAddr.Location = new System.Drawing.Point(1, 67);
+            this.label_dbAddr.Location = new System.Drawing.Point(11, 71);
             this.label_dbAddr.Name = "label_dbAddr";
             this.label_dbAddr.Size = new System.Drawing.Size(55, 15);
             this.label_dbAddr.TabIndex = 5;
@@ -224,16 +221,16 @@
             // 
             // textBox_dbAddr
             // 
-            this.textBox_dbAddr.Location = new System.Drawing.Point(62, 63);
+            this.textBox_dbAddr.Location = new System.Drawing.Point(72, 68);
             this.textBox_dbAddr.Name = "textBox_dbAddr";
-            this.textBox_dbAddr.Size = new System.Drawing.Size(158, 23);
+            this.textBox_dbAddr.Size = new System.Drawing.Size(107, 23);
             this.textBox_dbAddr.TabIndex = 3;
             this.textBox_dbAddr.Text = "127.0.0.1";
             // 
             // label_mccAddr
             // 
             this.label_mccAddr.AutoSize = true;
-            this.label_mccAddr.Location = new System.Drawing.Point(1, 32);
+            this.label_mccAddr.Location = new System.Drawing.Point(6, 42);
             this.label_mccAddr.Name = "label_mccAddr";
             this.label_mccAddr.Size = new System.Drawing.Size(60, 15);
             this.label_mccAddr.TabIndex = 2;
@@ -241,9 +238,9 @@
             // 
             // textBox_mccAddr
             // 
-            this.textBox_mccAddr.Location = new System.Drawing.Point(62, 29);
+            this.textBox_mccAddr.Location = new System.Drawing.Point(72, 39);
             this.textBox_mccAddr.Name = "textBox_mccAddr";
-            this.textBox_mccAddr.Size = new System.Drawing.Size(158, 23);
+            this.textBox_mccAddr.Size = new System.Drawing.Size(107, 23);
             this.textBox_mccAddr.TabIndex = 0;
             this.textBox_mccAddr.Text = "127.0.0.1";
             // 
@@ -260,7 +257,7 @@
             this.tabPage_dataflow.Location = new System.Drawing.Point(4, 24);
             this.tabPage_dataflow.Name = "tabPage_dataflow";
             this.tabPage_dataflow.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage_dataflow.Size = new System.Drawing.Size(298, 245);
+            this.tabPage_dataflow.Size = new System.Drawing.Size(262, 329);
             this.tabPage_dataflow.TabIndex = 1;
             this.tabPage_dataflow.Text = "Dataflow";
             this.tabPage_dataflow.UseVisualStyleBackColor = true;
@@ -270,7 +267,7 @@
             this.label_engineStatus.AutoSize = true;
             this.label_engineStatus.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             this.label_engineStatus.ForeColor = System.Drawing.Color.Red;
-            this.label_engineStatus.Location = new System.Drawing.Point(183, 15);
+            this.label_engineStatus.Location = new System.Drawing.Point(83, 276);
             this.label_engineStatus.Name = "label_engineStatus";
             this.label_engineStatus.Size = new System.Drawing.Size(88, 15);
             this.label_engineStatus.TabIndex = 10;
@@ -278,9 +275,9 @@
             // 
             // button_engineToggle
             // 
-            this.button_engineToggle.Location = new System.Drawing.Point(183, 33);
+            this.button_engineToggle.Location = new System.Drawing.Point(36, 294);
             this.button_engineToggle.Name = "button_engineToggle";
-            this.button_engineToggle.Size = new System.Drawing.Size(88, 55);
+            this.button_engineToggle.Size = new System.Drawing.Size(183, 24);
             this.button_engineToggle.TabIndex = 9;
             this.button_engineToggle.Text = "TOGGLE ENGINE";
             this.button_engineToggle.UseVisualStyleBackColor = true;
@@ -289,7 +286,7 @@
             // label_varRpm
             // 
             this.label_varRpm.AutoSize = true;
-            this.label_varRpm.Location = new System.Drawing.Point(49, 68);
+            this.label_varRpm.Location = new System.Drawing.Point(77, 79);
             this.label_varRpm.Name = "label_varRpm";
             this.label_varRpm.Size = new System.Drawing.Size(32, 15);
             this.label_varRpm.TabIndex = 7;
@@ -298,7 +295,7 @@
             // label_varVbr
             // 
             this.label_varVbr.AutoSize = true;
-            this.label_varVbr.Location = new System.Drawing.Point(21, 39);
+            this.label_varVbr.Location = new System.Drawing.Point(49, 50);
             this.label_varVbr.Name = "label_varVbr";
             this.label_varVbr.Size = new System.Drawing.Size(60, 15);
             this.label_varVbr.TabIndex = 6;
@@ -307,7 +304,7 @@
             // label_varTmp
             // 
             this.label_varTmp.AutoSize = true;
-            this.label_varTmp.Location = new System.Drawing.Point(8, 10);
+            this.label_varTmp.Location = new System.Drawing.Point(36, 21);
             this.label_varTmp.Name = "label_varTmp";
             this.label_varTmp.Size = new System.Drawing.Size(73, 15);
             this.label_varTmp.TabIndex = 5;
@@ -315,7 +312,7 @@
             // 
             // textBox_varRpm
             // 
-            this.textBox_varRpm.Location = new System.Drawing.Point(87, 65);
+            this.textBox_varRpm.Location = new System.Drawing.Point(115, 76);
             this.textBox_varRpm.Name = "textBox_varRpm";
             this.textBox_varRpm.ReadOnly = true;
             this.textBox_varRpm.Size = new System.Drawing.Size(80, 23);
@@ -323,7 +320,7 @@
             // 
             // textBox_varTmp
             // 
-            this.textBox_varTmp.Location = new System.Drawing.Point(87, 7);
+            this.textBox_varTmp.Location = new System.Drawing.Point(115, 18);
             this.textBox_varTmp.Name = "textBox_varTmp";
             this.textBox_varTmp.ReadOnly = true;
             this.textBox_varTmp.Size = new System.Drawing.Size(80, 23);
@@ -331,22 +328,11 @@
             // 
             // textBox_varVbr
             // 
-            this.textBox_varVbr.Location = new System.Drawing.Point(87, 36);
+            this.textBox_varVbr.Location = new System.Drawing.Point(115, 47);
             this.textBox_varVbr.Name = "textBox_varVbr";
             this.textBox_varVbr.ReadOnly = true;
             this.textBox_varVbr.Size = new System.Drawing.Size(80, 23);
             this.textBox_varVbr.TabIndex = 1;
-            // 
-            // tabPage_web
-            // 
-            this.tabPage_web.Controls.Add(this.button_launchWeb);
-            this.tabPage_web.Location = new System.Drawing.Point(4, 24);
-            this.tabPage_web.Name = "tabPage_web";
-            this.tabPage_web.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage_web.Size = new System.Drawing.Size(298, 245);
-            this.tabPage_web.TabIndex = 2;
-            this.tabPage_web.Text = "Web";
-            this.tabPage_web.UseVisualStyleBackColor = true;
             // 
             // notifyIcon_bgRun
             // 
@@ -371,21 +357,78 @@
             this.CloseToolStripMenuItem.Text = "Close";
             this.CloseToolStripMenuItem.Click += new System.EventHandler(this.CloseToolStripMenuItem_Click);
             // 
-            // button_launchWeb
+            // groupBox_connections
             // 
-            this.button_launchWeb.Location = new System.Drawing.Point(93, 110);
-            this.button_launchWeb.Name = "button_launchWeb";
-            this.button_launchWeb.Size = new System.Drawing.Size(104, 23);
-            this.button_launchWeb.TabIndex = 0;
-            this.button_launchWeb.Text = "Launch web app";
-            this.button_launchWeb.UseVisualStyleBackColor = true;
-            this.button_launchWeb.Click += new System.EventHandler(this.button_launchWeb_Click);
+            this.groupBox_connections.Controls.Add(this.label_mccAddr);
+            this.groupBox_connections.Controls.Add(this.textBox_mccAddr);
+            this.groupBox_connections.Controls.Add(this.numericUD_mccPort);
+            this.groupBox_connections.Controls.Add(label_addrTip);
+            this.groupBox_connections.Controls.Add(label_portTip);
+            this.groupBox_connections.Controls.Add(this.textBox_dbAddr);
+            this.groupBox_connections.Controls.Add(this.numericUD_dbPort);
+            this.groupBox_connections.Controls.Add(this.label_dbAddr);
+            this.groupBox_connections.Location = new System.Drawing.Point(8, 6);
+            this.groupBox_connections.Name = "groupBox_connections";
+            this.groupBox_connections.Size = new System.Drawing.Size(253, 102);
+            this.groupBox_connections.TabIndex = 20;
+            this.groupBox_connections.TabStop = false;
+            this.groupBox_connections.Text = "Connection";
+            // 
+            // groupBox_dbInfo
+            // 
+            this.groupBox_dbInfo.Controls.Add(this.label_dbNameTip);
+            this.groupBox_dbInfo.Controls.Add(this.textBox_dbName);
+            this.groupBox_dbInfo.Controls.Add(this.label_dbTableNameTip);
+            this.groupBox_dbInfo.Controls.Add(this.textBox_dbTableName);
+            this.groupBox_dbInfo.Location = new System.Drawing.Point(8, 114);
+            this.groupBox_dbInfo.Name = "groupBox_dbInfo";
+            this.groupBox_dbInfo.Size = new System.Drawing.Size(253, 102);
+            this.groupBox_dbInfo.TabIndex = 21;
+            this.groupBox_dbInfo.TabStop = false;
+            this.groupBox_dbInfo.Text = "Database";
+            // 
+            // groupBox_clients
+            // 
+            this.groupBox_clients.Controls.Add(this.numericUD_clientsPort);
+            this.groupBox_clients.Controls.Add(label_clientsPort);
+            this.groupBox_clients.Location = new System.Drawing.Point(8, 222);
+            this.groupBox_clients.Name = "groupBox_clients";
+            this.groupBox_clients.Size = new System.Drawing.Size(253, 55);
+            this.groupBox_clients.TabIndex = 22;
+            this.groupBox_clients.TabStop = false;
+            this.groupBox_clients.Text = "Client";
+            // 
+            // label_clientsPort
+            // 
+            label_clientsPort.AutoSize = true;
+            label_clientsPort.Location = new System.Drawing.Point(6, 24);
+            label_clientsPort.Name = "label_clientsPort";
+            label_clientsPort.Size = new System.Drawing.Size(80, 15);
+            label_clientsPort.TabIndex = 23;
+            label_clientsPort.Text = "Listening port";
+            // 
+            // numericUD_clientsPort
+            // 
+            this.numericUD_clientsPort.Location = new System.Drawing.Point(177, 22);
+            this.numericUD_clientsPort.Maximum = new decimal(new int[] {
+            65535,
+            0,
+            0,
+            0});
+            this.numericUD_clientsPort.Name = "numericUD_clientsPort";
+            this.numericUD_clientsPort.Size = new System.Drawing.Size(69, 23);
+            this.numericUD_clientsPort.TabIndex = 14;
+            this.numericUD_clientsPort.Value = new decimal(new int[] {
+            29500,
+            0,
+            0,
+            0});
             // 
             // Form_Menu
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(302, 271);
+            this.ClientSize = new System.Drawing.Size(267, 354);
             this.Controls.Add(this.tabControl_menu);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.MaximizeBox = false;
@@ -400,8 +443,14 @@
             ((System.ComponentModel.ISupportInitialize)(this.numericUD_mccPort)).EndInit();
             this.tabPage_dataflow.ResumeLayout(false);
             this.tabPage_dataflow.PerformLayout();
-            this.tabPage_web.ResumeLayout(false);
             this.contextMenuStrip_bgRunMenu.ResumeLayout(false);
+            this.groupBox_connections.ResumeLayout(false);
+            this.groupBox_connections.PerformLayout();
+            this.groupBox_dbInfo.ResumeLayout(false);
+            this.groupBox_dbInfo.PerformLayout();
+            this.groupBox_clients.ResumeLayout(false);
+            this.groupBox_clients.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUD_clientsPort)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -436,7 +485,9 @@
         private TextBox textBox_dbName;
         private TextBox textBox_dbTableName;
         private Label label_dbTableNameTip;
-        private TabPage tabPage_web;
-        private Button button_launchWeb;
+        private GroupBox groupBox_clients;
+        private NumericUpDown numericUD_clientsPort;
+        private GroupBox groupBox_dbInfo;
+        private GroupBox groupBox_connections;
     }
 }
