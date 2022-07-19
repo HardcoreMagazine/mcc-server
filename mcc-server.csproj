@@ -7,10 +7,13 @@
     <Nullable>enable</Nullable>
     <UseWindowsForms>true</UseWindowsForms>
     <ImplicitUsings>enable</ImplicitUsings>
+	<!-- Disable "Thread.Abort is obsolete" warnings for entire project. -->
+	<NoWarn>$(NoWarn);SYSLIB0006</NoWarn>
   </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="MySql.Data" Version="8.0.29" />
+    <PackageReference Include="Simple-HTTP" Version="1.0.6" />
   </ItemGroup>
 
 </Project>

@@ -6,6 +6,7 @@ using MySql.Data.MySqlClient;
 using System.Data.Common;
 using System.Net;
 using System.Globalization;
+using SimpleHttp;
 
 namespace mcc_server
 {
@@ -25,6 +26,7 @@ namespace mcc_server
 
         private const int msgSize = 128; //max message size: 128 B
         private byte[] asyncBuffer = new byte[msgSize];
+        private HttpListener httpListener = new HttpListener();
 
         /// <summary>
         /// Save all current settings on local hard drive. 
@@ -41,7 +43,9 @@ namespace mcc_server
                 DbPort = (ushort)numericUD_dbPort.Value,
                 DbName = textBox_dbName.Text,
                 DbTableName = textBox_dbTableName.Text,
-                ClientsPort = (ushort)numericUD_dbPort.Value,
+                HostIp = textBox_hostAddr.Text,
+                HostPort = (ushort)numericUD_hostPort.Value,
+                ClientsPort = (ushort)numericUD_clientsPort.Value,
                 RunInBG = checkBox_bgRun.Checked,
                 SaveSettings = checkBox_saveUserSettings.Checked
             };
@@ -79,6 +83,8 @@ namespace mcc_server
                         numericUD_dbPort.Value = settings.DbPort;
                         textBox_dbName.Text = settings.DbName;
                         textBox_dbTableName.Text = settings.DbTableName;
+                        textBox_hostAddr.Text = settings.HostIp;
+                        numericUD_hostPort.Value = settings.HostPort;
                         numericUD_clientsPort.Value = settings.ClientsPort;
                         checkBox_bgRun.Checked = settings.RunInBG;
                         checkBox_saveUserSettings.Checked = settings.SaveSettings;
@@ -172,10 +178,7 @@ namespace mcc_server
                         continue;
                     }
                 }
-                catch (Exception)
-                {
-                    // No handling
-                }
+                catch (Exception) { } // No handling
             }
             return data;
         }
@@ -195,10 +198,17 @@ namespace mcc_server
             {
                 // Low-medium priority:
                 // will never show up unless called on main thread
-                /*
-                MessageBox.Show("Provide database connection address", "Error",
-                    MessageBoxButtons.OK, MessageBoxIcon.Error);
-                */
+                this.Invoke(new Action(() =>
+                {
+                    MessageBox.Show("Operation aborted: provide database connection address", "Error",
+                        MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }));
+                try
+                {
+                    // !! Deprecated function (level: warning) !!
+                    Thread.CurrentThread.Abort();
+                }
+                catch (Exception) { } // No handling, just abort
             }
             else
             {
@@ -234,46 +244,44 @@ namespace mcc_server
                 }
                 catch (MySqlException)
                 {
-                    // Low-medium priority:
-                    // will never show up unless called on main thread
-                    /*
-                    MessageBox.Show($"Unable to connect with '{ip}:{port}'", "Error",
-                        MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    */
+                    this.Invoke(new Action(() =>
+                    {
+                        MessageBox.Show($"Unable to connect with '{ip}:{port}'", "Error",
+                            MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }));
+                    try
+                    {
+                        Thread.CurrentThread.Abort();
+                    }
+                    catch (Exception) { }
                 }
                 catch (DbException)
                 {
-                    /*
-                    MessageBox.Show($"Unable to send query to '{databaseName}.{dbTableName}'", "Error",
-                        MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    */
+                    this.Invoke(new Action(() =>
+                    {
+                        MessageBox.Show($"Unable to send query to '{databaseName}.{dbTableName}'", "Error",
+                            MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }));
+                    try
+                    {
+                        Thread.CurrentThread.Abort();
+                    }
+                    catch (Exception) { }
                 }
                 catch (Exception)
                 {
-                    // Unknown error / no handling
+                    this.Invoke(new Action(() =>
+                    {
+                        MessageBox.Show("Unknown database error", "Error", 
+                            MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }));
+                    try
+                    {
+                        Thread.CurrentThread.Abort();
+                    }
+                    catch (Exception) { }
                 }
             }
-        }
-
-        /// <summary>
-        /// Get host's active IPv4 address.
-        /// <para>
-        /// Note that if VirtualBox or VMware present in system
-        /// their 'host-only' adapters must be disabled, otherwise function will return
-        /// virtual adapter IPv4 address.
-        /// </para>
-        /// </summary>
-        /// <returns>Host own IPv4 address as a string.</returns>
-        private static string GetLocalIPv4Address()
-        {
-            var host = Dns.GetHostEntry(Dns.GetHostName());
-            for (int i = 0; i < host.AddressList.Length; i++)
-            {
-                if (host.AddressList[i].AddressFamily == AddressFamily.InterNetwork)
-                    return host.AddressList[i].ToString();
-            }
-            // No network adapters with an IPv4 address in the system
-            return "127.0.0.1";
         }
 
         /// <summary>
@@ -285,12 +293,14 @@ namespace mcc_server
         /// <param name="listen">Optional param. Set to true if listening is required (answer is expected)</param>
         async private void SendToMcc(string cmd, bool listen = false)
         {
-            string ip = textBox_mccAddr.Text;
-            ushort port = (ushort)numericUD_mccPort.Value;
+            string mccIp = textBox_mccAddr.Text;
+            ushort mccPort = (ushort)numericUD_mccPort.Value;
+            string hostIp = textBox_hostAddr.Text;
+            ushort hostPort = (ushort)numericUD_hostPort.Value;
             TcpClient mccTcpClient = new TcpClient();
             try
             {
-                await mccTcpClient.ConnectAsync(ip, port);
+                await mccTcpClient.ConnectAsync(mccIp, mccPort);
                 using (NetworkStream ns = mccTcpClient.GetStream())
                 {
                     await ns.WriteAsync(Encoding.ASCII.GetBytes(cmd));
@@ -299,7 +309,7 @@ namespace mcc_server
                 this.Invoke(new Action(() => button_engineToggle.Enabled = true));
                 if (listen)
                 {
-                    TcpListener tcpListener = new TcpListener(IPAddress.Parse(GetLocalIPv4Address()), 29000 + 1);
+                    TcpListener tcpListener = new TcpListener(IPAddress.Parse(hostIp), hostPort);
                     tcpListener.Start();
                     TcpClient client = tcpListener.AcceptTcpClient();
                     while (label_engineStatus.Text == "ENGINE IS ON")
@@ -314,6 +324,7 @@ namespace mcc_server
                     client.Close();
                     tcpListener.Stop();
                 }
+                button_engineToggle.Enabled = true;
             }
             catch (SocketException)
             {
@@ -321,29 +332,46 @@ namespace mcc_server
                 this.Invoke(new Action(() =>
                 {
                     ToggleEngineLabel(true);
-                    MessageBox.Show($"Unable to connect with '{ip}:{port}'", "Error",
+                    MessageBox.Show($"Unable to connect with '{mccIp}:{mccPort}'", "Error",
                         MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    button_engineToggle.Enabled = true;
                 }));
+                try
+                {
+                    // !! Deprecated function (level: warning) !!
+                    Thread.CurrentThread.Abort(); 
+                }
+                catch (Exception) { } // No handling, just abort
             }
             catch (IOException)
             {
                 this.Invoke(new Action(() =>
                 {
                     ToggleEngineLabel(true);
-                    MessageBox.Show($"Unable to send command to '{ip}:{port}'", "Error",
+                    MessageBox.Show($"Unable to send command to '{mccIp}:{mccPort}'", "Error",
                         MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    button_engineToggle.Enabled = true;
                 }));
+                try
+                {
+                    Thread.CurrentThread.Abort();
+                }
+                catch (Exception) { }
             }
             catch (Exception) // Unknown error 
             {
                 this.Invoke(new Action(() =>
                 {
                     ToggleEngineLabel(true);
+                    MessageBox.Show("Unknown mcc error", "Error", 
+                        MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    button_engineToggle.Enabled = true;
                 }));
-            }
-            finally
-            {
-                button_engineToggle.Invoke(new Action(() => button_engineToggle.Enabled = true));
+                try
+                {
+                    Thread.CurrentThread.Abort();
+                }
+                catch (Exception) { }
             }
         }
 
@@ -355,10 +383,12 @@ namespace mcc_server
             {
                 // Enable engine, begin listening
                 ToggleEngineLabel();
+                // Run cascade function on parallel thread
+                // without locking UI
                 await Task.Run(() =>
                 {
                     SendToMcc("@ee", true);
-                });
+                }); 
             }
             else
             {
@@ -412,6 +442,74 @@ namespace mcc_server
             {
                 if (checkBox_saveUserSettings.Checked) //true by default
                     SaveSettings();
+            }
+        }
+
+        async private void button_applyClientPort_Click(object sender, EventArgs e)
+        {
+            // Disable controls [failsafe]
+            button_applyClientPort.Enabled = false;
+            numericUD_clientsPort.Enabled = false;
+
+            // Get server port
+            ushort port = (ushort)numericUD_clientsPort.Value;
+
+            // Add routes to http server
+            // HTTP responses: 0 - off, 1 - on, 2 - error
+            Route.Add("/cmd_ee", async (req, res, args) =>
+            {
+                if (label_engineStatus.Text == "ENGINE IS ON")
+                {
+                    res.AsText("ENG_ST=1");
+                    res.Close();
+                }
+                else
+                {
+                    button_engineToggle.Invoke(
+                        new Action(() => button_engineToggle.PerformClick()));
+                    // Sleep for 3 seconds && check if connection was made
+                    await Task.Run(() => Thread.Sleep(3000));
+                    if (label_engineStatus.Text == "ENGINE IS ON")
+                    {
+                        res.AsText("ENG_ST=1");
+                        res.Close();
+                    }
+                    else
+                    {
+                        res.AsText("ENG_ST=2");
+                        res.Close();
+                    }
+                }
+            });
+            Route.Add("/cmd_de", (req, res, args) =>
+            {
+                if (label_engineStatus.Text == "ENGINE IS OFF")
+                {
+                    res.AsText("ENG_ST=0");
+                    res.Close();
+                }
+                else
+                {
+                    button_engineToggle.Invoke(
+                        new Action(() => button_engineToggle.PerformClick()));
+                    res.AsText("ENG_ST=0");
+                    res.Close();
+                }
+            });
+            try
+            {
+                // Create simple HTTP server for remote control
+                // Note that code below task call does not execute
+                // because server runs indefinitely (until app is closed)
+                await HttpServer.ListenAsync(port, CancellationToken.None,
+                    Route.OnHttpRequestAsync);
+            }
+            catch (Exception ex)
+            {
+                button_applyClientPort.Enabled = true;
+                numericUD_clientsPort.Enabled = true;
+                MessageBox.Show(ex.Message, "Error", 
+                    MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
     }
