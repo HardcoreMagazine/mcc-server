@@ -382,7 +382,7 @@ namespace mcc_server
             if (label_engineStatus.Text == "ENGINE IS OFF") // Default option
             {
                 // Enable engine, begin listening
-                ToggleEngineLabel();
+                this.Invoke(new Action(() => ToggleEngineLabel()));
                 // Run cascade function on parallel thread
                 // without locking UI
                 await Task.Run(() =>
@@ -393,7 +393,7 @@ namespace mcc_server
             else
             {
                 // Disable engine, no listening
-                ToggleEngineLabel(true);
+                this.Invoke(new Action(() => ToggleEngineLabel()));
                 await Task.Run(() =>
                 {
                     SendToMcc("@de");
@@ -460,7 +460,7 @@ namespace mcc_server
             {
                 if (label_engineStatus.Text == "ENGINE IS ON")
                 {
-                    res.AsText("ENG_ST=1");
+                    res.AsText("@ENG_ST=1");
                     res.Close();
                 }
                 else
@@ -471,12 +471,12 @@ namespace mcc_server
                     await Task.Run(() => Thread.Sleep(3000));
                     if (label_engineStatus.Text == "ENGINE IS ON")
                     {
-                        res.AsText("ENG_ST=1");
+                        res.AsText("@ENG_ST=1");
                         res.Close();
                     }
                     else
                     {
-                        res.AsText("ENG_ST=2");
+                        res.AsText("@ENG_ST=2");
                         res.Close();
                     }
                 }
@@ -485,14 +485,17 @@ namespace mcc_server
             {
                 if (label_engineStatus.Text == "ENGINE IS OFF")
                 {
-                    res.AsText("ENG_ST=0");
+                    res.AsText("@ENG_ST=0");
                     res.Close();
                 }
                 else
                 {
                     button_engineToggle.Invoke(
                         new Action(() => button_engineToggle.PerformClick()));
-                    res.AsText("ENG_ST=0");
+                    // Will send 0 status regardless of 
+                    // event_buttonClick results
+                    // (original button function limitation)
+                    res.AsText("@ENG_ST=0");
                     res.Close();
                 }
             });
