@@ -2,13 +2,15 @@
 
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
-    <TargetFramework>net6.0-windows</TargetFramework>
+    <TargetFramework>net6.0-windows7.0</TargetFramework>
     <RootNamespace>mcc_server</RootNamespace>
     <Nullable>enable</Nullable>
     <UseWindowsForms>true</UseWindowsForms>
     <ImplicitUsings>enable</ImplicitUsings>
 	<!-- Disable "Thread.Abort is obsolete" warnings for entire project. -->
 	<NoWarn>$(NoWarn);SYSLIB0006</NoWarn>
+	<SupportedOSPlatformVersion>7.0</SupportedOSPlatformVersion>
+	<StartupObject>mcc_server.Program</StartupObject>
   </PropertyGroup>
 
   <ItemGroup>
