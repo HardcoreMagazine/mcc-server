@@ -12,6 +12,7 @@ App was fully tested with [Hercules](https://www.hw-group.com/software/hercules-
 utility and MySql v8
 
 ## Build requirements:
+- .NET 6
 - MySql.Data [by Oracle]
 - Simple-HTTP [by Darko Jurić]
 
