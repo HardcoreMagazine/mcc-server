@@ -27,5 +27,4 @@ utility and MySql v8 (test cases are not included)
 OR work directly from server application window
 
 ## Download:
-- [Windows x64 .NET-independant version](https://github.com/HardcoreMagazine/mcc-server/releases/download/v1/mcc-server-net-independant.zip) [150 MB]
 - [Windows x64 .NET-dependant version](https://github.com/HardcoreMagazine/mcc-server/releases/download/v1/mcc-server-net-dependant.zip) [12 MB]
